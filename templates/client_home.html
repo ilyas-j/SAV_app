@@ -1,175 +1,22 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Espace Client</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f2f2f2;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 15px;
-        }
-        h1 {
-            color: #333;
-            margin: 0;
-        }
-        .logout {
-            padding: 8px 15px;
-            background-color: #f44336;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        .logout:hover {
-            background-color: #d32f2f;
-        }
-        .create-btn {
-            display: inline-block;
-            margin-bottom: 20px;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-        .create-btn:hover {
-            background-color: #45a049;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-        tr:hover {
-            background-color: #f9f9f9;
-        }
-        .status {
-            padding: 5px 10px;
-            border-radius: 15px;
-            display: inline-block;
-            font-size: 0.9em;
-        }
-        .status-NOUVELLE {
-            background-color: #bbdefb;
-            color: #0d47a1;
-        }
-        .status-EN_COURS {
-            background-color: #fff9c4;
-            color: #f57f17;
-        }
-        .status-DIAGNOSTIC {
-            background-color: #c8e6c9;
-            color: #1b5e20;
-        }
-        .status-ATTENTE_PIECES {
-            background-color: #ffccbc;
-            color: #bf360c;
-        }
-        .status-TERMINEE {
-            background-color: #b2dfdb;
-            color: #004d40;
-        }
-        .status-REFUSEE {
-            background-color: #ffcdd2;
-            color: #b71c1c;
-        }
-        .no-request {
-            text-align: center;
-            padding: 30px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-        }
-        .success-message {
-            padding: 10px 15px;
-            background-color: #dff0d8;
-            color: #3c763d;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Bienvenue, {{ request.user.username }}</h1>
-            <a href="{% url 'logout' %}" class="logout">Déconnexion</a>
-        </header>
-        
-        {% if messages %}
-            {% for message in messages %}
-                <div class="success-message">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-        
-        <h2>Vos demandes de réparation</h2>
-        <a href="{% url 'creer_demande' %}" class="create-btn">+ Nouvelle demande de réparation</a>
-        
-        {% if demandes %}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Référence</th>
-                        <th>Description</th>
-                        <th>Date</th>
-                        <th>Statut</th>
-                        <th>Détails</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for demande in demandes %}
-                    <tr>
-                        <td>#{{ demande.id }}</td>
-                        <td>{{ demande.description|truncatechars:50 }}</td>
-                        <td>{{ demande.date_creation|date:"d/m/Y" }}</td>
-                        <td>
-                            <span class="status status-{{ demande.status }}">
-                                {{ demande.get_status_display }}
-                            </span>
-                        </td>
-                        <td>
-                            {% if demande.diagnostic %}
-                                <p><strong>Diagnostic:</strong> {{ demande.diagnostic }}</p>
-                                {% if demande.cout_estimatif %}
-                                <p><strong>Coût estimé:</strong> {{ demande.cout_estimatif }} €</p>
-                                {% endif %}
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <div class="no-request">
-                <p>Vous n'avez pas encore de demande de réparation.</p>
-                <p>Cliquez sur "Nouvelle demande de réparation" pour en créer une.</p>
-            </div>
-        {% endif %}
-    </div>
+    <h1>Bienvenue, {{ request.user.username }}</h1>
+    <a href="{% url 'logout' %}">Déconnexion</a>
+    
+    <h2>Vos demandes de réparation</h2>
+    <a href="{% url 'creer_demande' %}">Créer une nouvelle demande</a>
+    
+    <ul>
+        {% for demande in demandes %}
+        <li>
+            {{ demande.description }} - {{ demande.get_status_display }}
+            ({{ demande.date_creation }})
+        </li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
