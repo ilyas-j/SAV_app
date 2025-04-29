@@ -1,6 +1,6 @@
-from django.apps import AppConfig # type: ignore
+from django.apps import AppConfig
 
 
-class SavConfig(AppConfig):
+class AppConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'SAV'
+    name = 'app'  # Changed from 'SAV' to 'app' to match directory name
