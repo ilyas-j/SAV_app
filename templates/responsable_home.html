@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Espace Responsable SAV</title>
+</head>
+<body>
+    <h1>Bienvenue, Responsable SAV</h1>
+    <a href="{% url 'logout' %}">Déconnexion</a>
+    
+    <h2>Demandes de réparation</h2>
+    <ul>
+        {% for demande in demandes %}
+        <li>
+            {{ demande.description }} - {{ demande.get_status_display }}
+            (Client: {{ demande.client.username }})
+            {% if demande.status == 'NOUVELLE' %}
+            <form method="post" action="{% url 'affecter_reparation' demande.id %}">
+                {% csrf_token %}
+                <select name="technicien">
+                    {% for tech in techniciens %}
+                    <option value="{{ tech.id }}">{{ tech.username }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Affecter</button>
+            </form>
+            {% elif demande.technicien %}
+            (Technicien: {{ demande.technicien.username }})
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

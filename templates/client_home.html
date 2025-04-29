@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Espace Client</title>
+</head>
+<body>
+    <h1>Bienvenue, {{ request.user.username }}</h1>
+    <a href="{% url 'logout' %}">Déconnexion</a>
+    
+    <h2>Vos demandes de réparation</h2>
+    <a href="{% url 'creer_demande' %}">Créer une nouvelle demande</a>
+    
+    <ul>
+        {% for demande in demandes %}
+        <li>
+            {{ demande.description }} - {{ demande.get_status_display }}
+            ({{ demande.date_creation }})
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

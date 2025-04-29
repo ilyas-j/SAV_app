@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Espace Technicien</title>
+</head>
+<body>
+    <h1>Bienvenue, {{ request.user.username }}</h1>
+    <a href="{% url 'logout' %}">Déconnexion</a>
+    
+    <h2>Réparations à effectuer</h2>
+    <ul>
+        {% for reparation in reparations %}
+        <li>
+            {{ reparation.description }} - {{ reparation.get_status_display }}
+            (Client: {{ reparation.client.username }})
+            {% if reparation.status == 'EN_COURS' %}
+            <a href="{% url 'completer_diagnostic' reparation.id %}">Compléter le diagnostic</a>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
